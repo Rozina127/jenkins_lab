@@ -8,6 +8,9 @@ pipeline {
             }
         }
         stage('Test') {
+            when {
+                branch 'main' // Yeh hissa add kiya gaya hai
+            }
             steps {
                 echo 'Testing..'
                 // Here you can define commands for your tests
