@@ -2,22 +2,24 @@ pipeline {
     environment { 
         VERSION = '1.0' 
     }
+    parameters {
+        booleanParam(name: 'executeTests', defaultValue: true, description: 'Run the Test stage?') // Yeh naya block add kiya hai
+    }
     agent any
     tools {
-        maven 'Maven' // Yeh naya block add kiya hai. 'Maven' woh naam hai jo aap ne Jenkins Tools mein set kiya hai.
+        maven 'Maven' 
     }
     stages {
         stage('Build') {
             steps {
                 echo "Building Version ${env.VERSION}" 
-                
-                // Yeh Windows ke liye 'bat' command hai
-                bat 'mvn --version' // Yeh line add ki hai
+                bat 'mvn --version' 
             }
         }
         stage('Test') {
             when {
-                branch 'main'
+                // Pehle yahan 'branch 'main'' tha
+                expression { params.executeTests == true } // Is line ko tabdeel kiya hai
             }
             steps {
                 echo 'Testing..'
