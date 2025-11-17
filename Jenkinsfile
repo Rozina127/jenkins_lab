@@ -1,15 +1,18 @@
 pipeline {
+    environment { 
+        VERSION = '1.0' // Yeh naya block add kiya hai
+    }
     agent any
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
-                // Here you can define commands for your build
+                // Pehle yahan sirf 'Building..' tha
+                echo "Building Version ${env.VERSION}" // Is line ko tabdeel kiya hai
             }
         }
         stage('Test') {
             when {
-                branch 'main' // Yeh hissa add kiya gaya hai
+                branch 'main'
             }
             steps {
                 echo 'Testing..'
