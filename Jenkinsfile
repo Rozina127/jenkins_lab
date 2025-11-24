@@ -1,39 +1,23 @@
-pipeline {
-    environment { 
-        VERSION = '1.0' 
-    }
-    parameters {
-        booleanParam(name: 'executeTests', defaultValue: true, description: 'Run the Test stage?') // Yeh naya block add kiya hai
-    }
+pipeline
+{
     agent any
-    tools {
-        maven 'Maven' 
-    }
-    stages {
-        stage('Build') {
-            steps {
-                echo "Building Version ${env.VERSION}" 
-                bat 'mvn --version' 
+    stages 
+    {
+        stage('Security Check') 
+        {
+            steps
+            {
+                // Retrieving the secret with ID 'my-secret'
+                withCredentials([string(credentialsId: 'my-secret', variable: 'API_KEY')])
+                {
+                    script
+                    {
+                        echo "Secret found!"
+                        // Jenkins automatically masks the secret in the logs
+                        echo "The secret is: ${API_KEY}"
+                    }
+                }
             }
-        }
-        stage('Test') {
-            when {
-                // Pehle yahan 'branch 'main'' tha
-                expression { params.executeTests == true } // Is line ko tabdeel kiya hai
-            }
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
-    }
-    post {
-        success {
-            echo 'Pipeline completed successfully'
         }
     }
 }
